@@ -1,6 +1,6 @@
 import os
 import pymeshlab
-
+import pdb 
 import vedo as vd
 
 import re
@@ -204,8 +204,9 @@ def texture_mapping(mesh_, bundle_, scale_ratio, t_matrix, obj_filename, filenam
 
     # create a new MeshSet
     ms = pymeshlab.MeshSet()
-
-    ms.load_project(bundle_)
+    pdb.set_trace()
+    img_list = bundle_.replace("cameras.out", "list.txt")
+    ms.load_project([bundle_, img_list])
     # ms.load_project(
     #     ["/home/ttsesm/Development/repair/data/20211117_C0011/colmap_workspace/texture_map/images/bundle.rd.out",
     #      "/home/ttsesm/Development/repair/data/20211117_C0011/colmap_workspace/texture_map/images/texture_map.out.list.txt"])
@@ -214,8 +215,8 @@ def texture_mapping(mesh_, bundle_, scale_ratio, t_matrix, obj_filename, filenam
     ms.add_mesh(o3d2pymesh(mesh_))
 
     # filename = os.path.basename(input_mesh)
-
-    ms.parameterization__texturing_from_registered_rasters(texturesize=6000, texturename=filename+".png")
+    texture_path = bundle_.replace("cameras.out", "model.png")
+    ms.parameterization__texturing_from_registered_rasters(texturesize=6000, texturename=texture_path)
 
     # return back to original polyga space
     ms.matrix_set_copy_transformation(transformmatrix=np.linalg.inv(t_matrix), compose=True)
@@ -229,17 +230,18 @@ def find_files(folder, types):
 
     if len(types) < 2:
         types = ",".join(types)
-        return natsort.natsorted(glob.glob(folder + '**/*.' + types, flags=glob.BRACE | glob.GLOBSTAR))
+        return natsort.natsorted(glob.glob(folder + '**/**/*.' + types, flags=glob.BRACE | glob.GLOBSTAR))
     else:
         types = ",".join(types)
-        return natsort.natsorted(glob.glob(folder + '**/*.{' + types + '}', flags=glob.BRACE | glob.GLOBSTAR))
+        return natsort.natsorted(glob.glob(folder + '**/**/*.{' + types + '}', flags=glob.BRACE | glob.GLOBSTAR))
 
 def main():
 
-    folder = "/run/media/ttsesm/external_data/repair_dataset/dataset@server/group_6/"
+    folder = "/media/lucap/big_data/datasets/repair/consolidated_fragments/group_1"
     # folder = "/run/media/ttsesm/external_data/data_for_testing/group_8/"
-    scanned_meshes = find_files(folder, ["ply"])
-    scanned_meshes = list(filter(lambda k: 'processed' in k, scanned_meshes))
+    
+    scanned_meshes = find_files(os.path.join(folder, 'scanned'), ["ply"])
+    # scanned_meshes = list(filter(lambda k: 'scanned' in k, scanned_meshes))
 
     filenames = []
 
@@ -250,16 +252,16 @@ def main():
 
         filenames.append(basename_without_ext)
 
-    metashape_meshes = find_files(folder, ["obj"])
+    metashape_meshes = find_files(os.path.join(folder, 'photogrammetry'), ["obj"])
 
-    bundlers = find_files(folder, ["out", "txt"])
+    bundlers = find_files(os.path.join(folder, 'photogrammetry'), ["out", "txt"])
 
-    pattern = re.compile('|'.join(map(str, [sub + "b" for sub in filenames])))
+    pattern = re.compile('|'.join(map(str, [sub for sub in filenames])))
     metashape_meshes = list(filter(pattern.search, metashape_meshes))
     bundlers = list(filter(pattern.search, bundlers))
 
-    bundlers = [bundlers[i:i + 2] for i in range(0, len(bundlers), 2)]
-
+    #bundlers = [bundlers[i:i + 2] for i in range(0, len(bundlers), 2)]
+    
     # for j, bundler in enumerate(bundlers):
     #     # # ignore bundlers
     #     # if j < 2:
@@ -269,19 +271,20 @@ def main():
     #
     #     for line in fileinput.input(images_list, inplace=1):
     #         print('{0}{1}'.format('./undistorted_images/', line.rstrip('\n')))
+    
 
     for i, scanned_mesh in enumerate(scanned_meshes):
         # ignore meshes
         # if i < 7 or i > 7:
-        if i < 4:
-            continue
+        # if i < 4:
+        #     continue
 
         mesh1_ = vd.Mesh(scanned_mesh)
         mesh2_ = vd.Mesh(metashape_meshes[i])
 
-        scale_ratio_down = mesh2_.diagonalSize() / mesh1_.diagonalSize()
+        scale_ratio_down = mesh2_.diagonal_size() / mesh1_.diagonal_size()
         # scale_ratio_down = 0.12
-        scale_ratio_up = mesh1_.diagonalSize() / mesh2_.diagonalSize()
+        scale_ratio_up = mesh1_.diagonal_size() / mesh2_.diagonal_size()
         # scale_ratio_up = 8.4
 
         mesh1_.scale(s=scale_ratio_down)
@@ -304,8 +307,8 @@ def main():
     #
     # vd.show(mesh1_, mesh2_, axes=1).close()
     #
-    # scale_ratio_down = mesh2_.diagonalSize() / mesh1_.diagonalSize()
-    # scale_ratio_up = mesh1_.diagonalSize() / mesh2_.diagonalSize()
+    # scale_ratio_down = mesh2_.diagonal_size() / mesh1_.diagonal_size()
+    # scale_ratio_up = mesh1_.diagonal_size() / mesh2_.diagonal_size()
     #
     # mesh1_.scale(s=scale_ratio_down)
     #
