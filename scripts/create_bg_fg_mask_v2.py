@@ -77,7 +77,7 @@ import re, collections
 
 def main():
     # folder = '/run/media/ttsesm/external_data/repair_dataset/pompeii/Pompeii_17_06_2022/hi_res_images/'
-    folder = '/media/lucap/big_data/datasets/repair/consolidated_fragments/group_1'
+    folder = '/media/lucap/big_data/datasets/repair/consolidated_fragments/group_3'
     # folder = '/run/media/ttsesm/external_data/repair_dataset/pompeii/fake_frescoes/polyga_raw/group_91/raw/RGB/'
     # last_folder = os.path.basename(os.path.normpath(folder))
     # dest_folder = folder.replace(last_folder, 'no_bg_images')

@@ -25,7 +25,7 @@ def main():
 
     # input_folder = "/run/media/ttsesm/external_data/repair_dataset/pompeii/fake_frescoes/polyga_raw/group_91/raw/RGB/"
     #input_folder = "/run/media/ttsesm/pose_est_rp/co3d/data_clean/mouse/377_43416_86289/"
-    input_folder = "/media/lucap/big_data/datasets/repair/consolidated_fragments/group_39/"
+    input_folder = "/media/lucap/big_data/datasets/repair/consolidated_fragments/group_3/"
     # input_folder = "/run/media/ttsesm/external_data/data_for_testing/group_11/raw/RGB/RPf_00079b/"
     # input_folder = "/run/media/ttsesm/external_data/repair_dataset/pompeii/Pompeii_17_06_2022/3d_models/"
     image_folders = list(filter(lambda k: '/images' in k, natsort.natsorted([x[0] for x in os.walk(input_folder)])))
@@ -93,7 +93,7 @@ def main():
         if chunk.model:
             chunk.exportModel(output_folder + '/model.obj', texture_format=Metashape.ImageFormatPNG)
 
-            chunk.exportCameras(output_folder + '/cameras.out', format=Metashape.CamerasFormatBundler)
+            chunk.exportCameras(output_folder + '/cameras.out', format=Metashape.CamerasFormatBundler, )
             chunk.exportCameras(output_folder + '/cameras.xml', format=Metashape.CamerasFormatXML)
 
         os.makedirs(os.path.join(output_folder, 'undistorted_images'), exist_ok=True)
