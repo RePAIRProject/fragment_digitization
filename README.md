@@ -48,3 +48,24 @@ Once the masks are created you can run the <span style="background-color:gray">`
 [Metashape](https://github.com/agisoft-llc)
 
 [Open3D](https://github.com/isl-org/Open3D)
+
+---
+
+## Acknowledgements
+
+This project has received funding from the European Union’s Horizon 2020 research and innovation programme under grant agreement No 964854
+
+---
+
+## Citation
+
+If you use this code in your research, please cite the following paper:
+
+```
+@inproceedings{repair2024,
+title={Re-assembling the Past: The RePAIR Dataset and Benchmark for Realistic 2D and 3D Puzzle Solving},
+author={Tsesmelis, Theodore and Palmieri, Luca and Khoroshiltseva, Marina and Islam, Adeela and Elkin, Gur and Shahar, Ofir Itzhak and Scarpellini, Gianluca and Fiorini, Stefano and Ohayon, Yaniv and Alal, Nadav and Aslan, Sinem and Moretti, Pietro and Vascon, Sebastiano and Gravina, Elena and Napolitano, Maria Cristina and Scarpati, Giuseppe and Zuchtriegel, Gabriel and Spühler, Alexandra and Fuchs, Michel E. and James, Stuart and Ben-Shahar, Ohad and Pelillo, Marcello and Del Bue, Alessio},
+booktitle={NeurIPS},
+year={2024}
+}
+```
